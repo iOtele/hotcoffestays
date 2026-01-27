@@ -12,7 +12,7 @@ const NavBar = () => {
       >
         HotCoffeStays
       </motion.div>
-      <div className="hidden md:flex space-x-8">
+      <div className="hidden md:flex space-x-12 text-lg font-medium">
         <a
           href="#features"
           className="text-foreground hover:text-gray-600 transition"

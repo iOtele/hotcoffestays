@@ -17,7 +17,7 @@ const Hero = () => {
               <span className="text-4xl md:text-6xl font-bold">Simplified</span>
             </h1>
             <p className="text-3xl text-text-color animate-fade-in animation-delay-200">
-              <span className="text-foreground font-bold ">Experience </span>
+              <span className="text-foreground font-bold">Experience </span>
               comfortable, secure, and fully furnished short-let apartments
               designed for stress-free living.
             </p>
