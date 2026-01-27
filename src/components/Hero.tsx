@@ -8,7 +8,7 @@ const Hero = () => {
         className="container mx-auto "
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
       >
         <div className="gap-32">
           <div className="space-y-6 p-8 flex flex-col items-center">

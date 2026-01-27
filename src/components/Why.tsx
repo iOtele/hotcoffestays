@@ -37,13 +37,13 @@ const Why = () => {
             amenities and thoughtfully furnished apartments.
           </p>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
           {features.map((feature, id) => (
             <div
               key={id}
-              className="bg-linear-to-br from-gray-100 to-gray-200 p-8 rounded-2xl hover:shadow-xl transition group"
+              className="bg-linear-to-br from-gray-100 to-gray-200 p-8 rounded-2xl hover:shadow-2xl transition group"
             >
-              <div className="bg-background w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition">
+              <div className="bg-background w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:scale-120 transition">
                 <feature.icon className="text-white" size={28} />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">
