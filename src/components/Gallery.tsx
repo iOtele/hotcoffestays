@@ -146,27 +146,28 @@ function Gallery() {
   };
 
   return (
-    <div className=" py-12 sm:px-6 lg:px-8 bg-[url('/bggalleryhot.jpg')] bg-cover bg-center min-h-screen pt-32 pb-20 px-6 bg-linear-to-br from-gray-50 via-white to-teal-50">
+    <div
+      id="gallery"
+      className=" py-12 sm:px-6 lg:px-8 bg-[url('/bggalleryhot.jpg')] bg-cover bg-center min-h-screen pt-32 pb-20 px-6 bg-linear-to-br from-gray-50 via-white to-teal-50"
+    >
       <div className="container mx-auto">
-        {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-text-color mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold text-text-color mb-6">
             ShortLet Apartments in Lagos
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Discover your perfect home away from home with our curated selection
-            of premium apartments
+          <p className="text-3xl text-text-color animate-fade-in animation-delay-200 mx-auto">
+            <span className="text-foreground font-bold ">Discover </span> your
+            perfect home away from home with our curated selection of premium
+            apartments
           </p>
         </div>
 
-        {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {apartments.map((apartment) => (
             <div
               key={apartment.id}
               className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group"
             >
-              {/* Image Container */}
               <div className="relative h-56 overflow-hidden">
                 <Image
                   height={250}

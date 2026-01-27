@@ -14,7 +14,7 @@ const Hero = () => {
           <div className="space-y-6 p-8 flex flex-col items-center">
             <h1 className="text-5xl md:text-8xl font-bold text-text-color leading-tight text-center">
               Your Staying <br />
-              <span className="text-7xl">Simplified</span>
+              <span className="text-4xl md:text-6xl font-bold">Simplified</span>
             </h1>
             <p className="text-3xl text-text-color animate-fade-in animation-delay-200">
               <span className="text-foreground font-bold ">Experience </span>
@@ -22,7 +22,7 @@ const Hero = () => {
               designed for stress-free living.
             </p>
             <div className="flex flex-col sm:flex-row gap-15 mt-20 animate-fade-in animation-delay-400">
-              <div className="flex gap-2 items-center bg-black text-foreground rounded-3xl px-8 py-2 hover:bg-gray-900 transition cursor-pointer group">
+              <div className="flex gap-2 items-center bg-background text-foreground rounded-3xl px-8 py-2 hover:bg-gray-700 transition cursor-pointer group">
                 <svg
                   className="w-8 h-8 mr-2"
                   fill="currentColor"
