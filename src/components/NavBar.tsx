@@ -10,7 +10,7 @@ const NavBar = () => {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        HotCoffeStays
+        Hotcoffestays and CarRentals
       </motion.div>
       <div className="hidden md:flex space-x-12 text-lg font-bold">
         <a
@@ -25,15 +25,24 @@ const NavBar = () => {
         >
           Download
         </a>
+        <a
+          href="#contactus"
+          className="text-foreground hover:text-gray-600 transition"
+        >
+          Contact Us
+        </a>
       </div>
-      <motion.button
-        className="bg-background outline-2 text-foreground px-6 py-2 rounded-full hover:bg-foreground hover:text-background transition"
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
-        Get Started
-      </motion.button>
+
+      <a href="#gallery">
+        <motion.button
+          className="bg-background outline-2 text-foreground px-6 py-2 rounded-full hover:bg-foreground hover:text-background transition cursor-pointer font-semibold shadow-lg"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          Get Started
+        </motion.button>
+      </a>
     </nav>
   );
 };

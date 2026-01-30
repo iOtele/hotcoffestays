@@ -8,9 +8,10 @@ const CallToAction = () => {
     >
       <div className="container mx-auto text-center">
         <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-          Ready for Your Next Short-Stay Experience?
+          <span className="text-foreground">Ready </span>
+          for Your Next Short-Stay Experience?
         </h2>
-        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+        <p className="text-xl text-text-color mb-8 max-w-2xl mx-auto">
           Join countless guests enjoying comfortable, secure, and hassle-free
           apartments.
         </p>
