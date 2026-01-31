@@ -20,10 +20,10 @@ const NavBar = () => {
           Why Us
         </a>
         <a
-          href="#download"
+          href="#booking"
           className="text-foreground hover:text-gray-600 transition"
         >
-          Download
+          Booking
         </a>
         <a
           href="#contactus"

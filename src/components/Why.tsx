@@ -1,12 +1,12 @@
 import React from "react";
-import { Shield, Leaf, Clock, Smartphone } from "lucide-react";
+import { Shield, Clock, Heart, Star } from "lucide-react";
 
 const Why = () => {
   const features = [
     {
       icon: Clock,
-      title: "Flexible Check-In",
-      desc: "Quick and hassle-free check-in so you can settle in instantly",
+      title: "24/7 Support",
+      desc: "Our dedicated team is always available to assist you, any time of day or night.",
     },
     {
       icon: Shield,
@@ -14,19 +14,22 @@ const Why = () => {
       desc: "Well-secured apartments with 24/7 monitoring for your peace of mind",
     },
     {
-      icon: Leaf,
-      title: "Eco-Friendly",
-      desc: "Sustainable living with energy-efficient apartments and amenities",
+      icon: Heart,
+      title: "Exceptional Service",
+      desc: "We go above and beyond to ensure every stay and journey exceeds your expectations.",
     },
     {
-      icon: Smartphone,
-      title: "Easy Booking",
-      desc: "Book your stay in seconds through our simple online system",
+      icon: Star,
+      title: "Quality Guaranteed",
+      desc: "Premium properties and well-maintained vehicles for an unforgettable experience.",
     },
   ];
 
   return (
-    <section id="features" className=" py-12 sm:px-6 lg:px-8 bg-cover bg-center pt-32 pb-20 px-6 bg-linear-to-br from-gray-50 via-white to-teal-50">
+    <section
+      id="features"
+      className=" py-12 sm:px-6 text-foreground lg:px-8 pt-32 pb-20 px-6 bg-linear-to-br from-amber-500/20 to-blue-500/20"
+    >
       <div className="container mx-auto ">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-text-color mb-4">
@@ -41,10 +44,13 @@ const Why = () => {
           {features.map((feature, id) => (
             <div
               key={id}
-              className="bg-linear-to-br from-gray-100 to-gray-200 p-8 rounded-2xl hover:shadow-2xl transition group"
+              className="bg-linear-to-br from-gray-500 to-gray-200 p-8 rounded-2xl hover:shadow-2xl hover:shadow-orange-600 transition group"
             >
-              <div className="bg-background w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:scale-120 transition">
-                <feature.icon className="text-white" size={28} />
+              <div
+                className=" rounded-xl flex items-center justify-center mb-4 group-hover:scale-120 transition 
+              w-20 h-20 mx-auto "
+              >
+                <feature.icon className="text-amber-500" size={28} />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">
                 {feature.title}

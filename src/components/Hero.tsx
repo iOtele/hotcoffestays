@@ -3,26 +3,29 @@ import { motion } from "motion/react";
 
 const Hero = () => {
   return (
-    <section className="min-h-screen pt-32 pb-20 px-6 bg-linear-to-br from-gray-50 via-white to-teal-50 bg-[url('/bghotcoffestays.jpg')] bg-cover bg-center ">
+    <section className="relative min-h-screen pt-32 pb-20 px-6 bg-linear-to-br from-gray-50 via-white to-teal-50 bg-[url('/bghotcoffestays.jpg')] bg-cover bg-center ">
+      <div className="absolute inset-0 bg-linear-to-b from-transparent via-black/50 to-black"></div>
       <motion.div
         className="container mx-auto "
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        <div className="gap-32">
+        <div className="gap-32 z-20">
           <div className="space-y-6 p-8 flex flex-col items-center">
             <h1 className="text-5xl md:text-8xl font-bold text-text-color leading-tight text-center">
-              Your Staying <br />
-              <span className="text-4xl md:text-6xl font-bold">Simplified</span>
+              Short-Let Stays & Car Rentals <br />
+              <span className="text-4xl md:text-6xl font-bold">
+                Made Simple
+              </span>
             </h1>
-            <p className="text-3xl text-text-color animate-fade-in animation-delay-200">
-              <span className="text-foreground font-bold">Experience </span>
-              comfortable, secure, and fully furnished short-let apartments
-              designed for stress-free living.
+            <p className="text-3xl text-text-color animate-fade-in animation-delay-200 z-20 text-center">
+              <span className="text-foreground font-bold ">Experience </span>
+              hassle-free stays and smooth mobility with our short-let
+              apartments and car rentals.
             </p>
-            <div className="flex flex-col sm:flex-row gap-15 mt-20 animate-fade-in animation-delay-400">
-              <div className="flex gap-2 items-center bg-background text-foreground rounded-3xl px-8 py-2 hover:bg-gray-700 transition cursor-pointer group">
+            <div className="flex flex-col sm:flex-row gap-15 mt-20 animate-fade-in animation-delay-400 z-20">
+              <div className="relative flex gap-2 items-center bg-background text-foreground rounded-3xl px-8 py-2 hover:bg-gray-700 transition cursor-pointer group">
                 <svg
                   className="w-8 h-8 mr-2"
                   fill="currentColor"
@@ -57,6 +60,11 @@ const Hero = () => {
           </div>
         </div>
       </motion.div>
+      <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div className="w-6 h-10 border-2 border-foreground/50 rounded-full flex items-start justify-center p-2">
+          <div className="w-1 h-3 bg-foreground/50 rounded-full"></div>
+        </div>
+      </div>
     </section>
   );
 };

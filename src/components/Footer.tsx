@@ -3,7 +3,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="py-10 sm:px-6 lg:px-8   px-6 bg-linear-to-br from-gray-900 via-gray-800 to-gray-900 ">
+    <footer className="py-10 sm:px-6 lg:px-8   px-6 bg-linear-to-br from-gray-900 via-gray-800 to-gray-700 ">
       <div className="container mx-auto ">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div className="space-y-2">

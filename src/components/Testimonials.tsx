@@ -1,5 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Star, Quote } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Quote,
+  Home,
+  Car,
+  Coffee,
+  Award,
+  Users,
+  Clock,
+  Shield,
+  Heart,
+  MapPin,
+  Star,
+} from "lucide-react";
 import Image from "next/image";
 
 interface Testimonial {
@@ -135,7 +149,7 @@ export default function TestimonialSwiper() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-400 via-gray-600 to-background py-20 px-4 sm:px-6 lg:px-8">
+    <div className=" min-h-screen bg-linear-to-br from-gray-400 via-gray-600 to-background py-20 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
@@ -150,7 +164,7 @@ export default function TestimonialSwiper() {
         {/* Testimonial Cards Swiper */}
         <div className="relative">
           <div
-            className="flex items-center justify-center h-150 md:h-100 relative overflow-visible"
+            className="flex items-center justify-center h-150 md:h-100 relative overflow-hidden"
             onMouseEnter={() => setIsAutoPlaying(false)}
             onMouseLeave={() => setIsAutoPlaying(true)}
           >
@@ -267,14 +281,16 @@ export default function TestimonialSwiper() {
         </div>
 
         {/* Stats Section */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-5">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mt-5">
           {[
             { value: "10,000+", label: "Happy Guests" },
+            { value: "500+", label: "Properties" },
+            { value: "200+", label: "Vehicles" },
             { value: "4.9/5", label: "Average Rating" },
             { value: "98%", label: "Satisfaction Rate" },
             { value: "500+", label: "5-Star Reviews" },
-          ].map((stat, idx) => (
-            <div key={idx} className="text-center">
+          ].map((stat, id) => (
+            <div key={id} className="text-center">
               <div className="text-3xl md:text-4xl font-bold text-gray-400 mb-2">
                 {stat.value}
               </div>

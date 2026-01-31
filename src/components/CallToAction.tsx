@@ -37,6 +37,13 @@ const CallToAction = () => {
             Play Store
           </button>
         </div>
+        <div className="flex flex-col sm:flex-row justify-center mt-10">
+          <a href="#booking" className="mr-0 sm:mr-4 mb-4 sm:mb-0">
+            <button className="bg-gray-700 text-foreground px-8 py-4 rounded-2xl hover:bg-gray-700 transition font-bold text-lg flex items-center justify-center gap-2">
+              Book Now
+            </button>
+          </a>
+        </div>
       </div>
     </section>
   );
