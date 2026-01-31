@@ -304,7 +304,7 @@ export default function TestimonialSwiper() {
           <p className="text-gray-300 text-lg mb-6">
             Ready to create your own success story?
           </p>
-          <a href="#contactus">
+          <a href="#booking">
             <button className="bg-gray-400 text-text-color px-8 py-4 rounded-full hover:bg-gray-500 transition font-bold text-lg shadow-lg hover:shadow-gray-400/50">
               Book Your Experience Today
             </button>

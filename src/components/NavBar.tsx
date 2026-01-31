@@ -26,7 +26,7 @@ const NavBar = () => {
           Booking
         </a>
         <a
-          href="#contactus"
+          href="tel:+2349048255252"
           className="text-foreground hover:text-gray-600 transition"
         >
           Contact Us
