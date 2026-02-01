@@ -10,7 +10,7 @@ const NavBar = () => {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        Hotcoffestays and CarRentals
+        Hotcoffestays & CarRentals
       </motion.div>
       <div className="hidden md:flex space-x-12 text-lg font-bold">
         <a
