@@ -1,16 +1,9 @@
 import React from "react";
-import { Home, Car, Coffee, Clock, MapPin } from "lucide-react";
 import Image from "next/image";
 
 export default function AboutUs() {
   return (
-    <div
-      className="min-h-screen"
-      style={{
-        backgroundColor: "var(--background)",
-        color: "var(--foreground)",
-      }}
-    >
+    <div className="min-h-screen">
       <section className="py-24 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -77,8 +70,6 @@ export default function AboutUs() {
           </div>
         </div>
       </section>
-
-     
     </div>
   );
 }

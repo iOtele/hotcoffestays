@@ -21,6 +21,7 @@ import {
   Home,
 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface Apartment {
   type: "apartment";
@@ -326,6 +327,7 @@ const AllRentals = () => {
   const [activeTab, setActiveTab] = useState<"apartments" | "cars">(
     "apartments",
   );
+  const router = useRouter();
   const [favorites, setFavorites] = useState<number[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("all");
@@ -479,8 +481,7 @@ const AllRentals = () => {
 
   const handleBooking = (id: number, type: "apartment" | "car") => {
     const query = type === "apartment" ? `apartmentId=${id}` : `carId=${id}`;
-
-    window.location.href = `/booking?${query}`;
+    router.push(`/booking?${query}`);
   };
 
   return (
@@ -489,7 +490,6 @@ const AllRentals = () => {
       className="py-12 sm:px-6 lg:px-8 bg-[url('/bggalleryhot.jpg')] bg-cover bg-center min-h-screen pt-32 pb-20 px-6"
     >
       <div className="container mx-auto">
-        {/* Tabs */}
         <div className="flex justify-center mb-8">
           <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-2 shadow-lg inline-flex">
             <button

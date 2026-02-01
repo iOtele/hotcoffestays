@@ -1,19 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Quote,
-  Home,
-  Car,
-  Coffee,
-  Award,
-  Users,
-  Clock,
-  Shield,
-  Heart,
-  MapPin,
-  Star,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Quote, Star } from "lucide-react";
 import Image from "next/image";
 
 interface Testimonial {
