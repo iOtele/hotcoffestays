@@ -5,7 +5,7 @@ const NavBar = () => {
   return (
     <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
       <motion.div
-        className="text-2xl font-bold text-foreground outline-2 rounded-full px-3 py-2 shadow-gray-600-300 hover:shadow-gray-100 transition cursor-pointer"
+        className="text-xl sm:text-2xl font-bold text-foreground outline-2 rounded-full p-2 md:px-2  shadow-gray-600-300 hover:shadow-gray-100 transition cursor-pointer"
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
