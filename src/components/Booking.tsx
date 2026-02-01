@@ -1,17 +1,19 @@
 "use client";
-import React, { useState, useEffect, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
+
+import React, { useState } from "react";
 import {
   Calendar,
-  Users,
   Phone,
   Mail,
-  MapPin,
   CreditCard,
   CheckCircle,
   AlertCircle,
   User,
   Home,
+  Car,
+  X,
+  Plus,
+  Minus,
 } from "lucide-react";
 
 interface FormData {
@@ -19,71 +21,114 @@ interface FormData {
   lastName: string;
   email: string;
   phone: string;
-  apartment: string;
   checkIn: string;
   checkOut: string;
-  guests: number;
   specialRequests: string;
   paymentMethod: string;
+}
+
+interface CartItem {
+  id: string;
+  type: "apartment" | "car";
+  name: string;
+  price: number;
+  quantity: number;
+  capacity: number;
 }
 
 interface FormErrors {
   [key: string]: string;
 }
 
-export default function ShortLetBookingForm() {
+export default function CheckoutBookingForm() {
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
-    apartment: "",
     checkIn: "",
     checkOut: "",
-    guests: 1,
     specialRequests: "",
     paymentMethod: "",
   });
 
+  const [cart, setCart] = useState<CartItem[]>([]);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
   const apartments = [
-    { id: "1", name: "Luxury Lekki Penthouse", price: 85000 },
-    { id: "2", name: "Cozy Victoria Island Studio", price: 65000 },
-    { id: "3", name: "Spacious Ikeja Apartment", price: 55000 },
-    { id: "4", name: "Modern Ikoyi Heights", price: 95000 },
-    { id: "5", name: "Charming Yaba Flat", price: 45000 },
-    { id: "6", name: "Elegant Banana Island Villa", price: 150000 },
-    { id: "7", name: "Contemporary Surulere Space", price: 50000 },
-    { id: "8", name: "Serene Ajah Getaway", price: 40000 },
+    { id: "1", name: "Luxury Lekki Penthouse", price: 85000, capacity: 4 },
+    { id: "2", name: "Cozy Victoria Island Studio", price: 65000, capacity: 2 },
+    { id: "3", name: "Spacious Ikeja Apartment", price: 55000, capacity: 3 },
+    { id: "4", name: "Modern Ikoyi Heights", price: 95000, capacity: 5 },
+    { id: "5", name: "Charming Yaba Flat", price: 45000, capacity: 2 },
+    {
+      id: "6",
+      name: "Elegant Banana Island Villa",
+      price: 150000,
+      capacity: 6,
+    },
+    { id: "7", name: "Contemporary Surulere Space", price: 50000, capacity: 4 },
+    { id: "8", name: "Serene Ajah Getaway", price: 40000, capacity: 2 },
   ];
 
-  const cars = useMemo(
-    () => [
-      { id: "1", title: "Toyota Camry 2023", type: "Sedan", price: 35000 },
-      { id: "2", title: "Mercedes-Benz GLE", type: "SUV", price: 85000 },
-      { id: "3", title: "Honda Accord 2022", type: "Sedan", price: 30000 },
-      { id: "4", title: "Range Rover Sport", type: "SUV", price: 120000 },
-      { id: "5", title: "Toyota Highlander", type: "SUV", price: 65000 },
-      { id: "6", title: "Lexus ES 350", type: "Luxury Sedan", price: 75000 },
-      { id: "7", title: "Nissan Altima 2023", type: "Sedan", price: 28000 },
-      { id: "8", title: "BMW X5", type: "Luxury SUV", price: 95000 },
-    ],
-    [],
-  );
+  const cars = [
+    { id: "1", name: "Toyota Camry 2023", price: 35000, capacity: 5 },
+    { id: "2", name: "Mercedes-Benz GLE", price: 85000, capacity: 7 },
+    { id: "3", name: "Honda Accord 2022", price: 30000, capacity: 5 },
+    { id: "4", name: "Range Rover Sport", price: 120000, capacity: 5 },
+    { id: "5", name: "Toyota Highlander", price: 65000, capacity: 8 },
+    { id: "6", name: "Lexus ES 350", price: 75000, capacity: 5 },
+  ];
 
   const paymentMethods = [
     { id: "card", name: "Credit/Debit Card", icon: CreditCard },
     { id: "transfer", name: "Bank Transfer", icon: CreditCard },
-    { id: "paystack", name: "Cash", icon: CreditCard },
+    { id: "cash", name: "Cash on Delivery", icon: CreditCard },
   ];
-  const [selectedCar, setSelectedCar] = useState<{
-    id: string;
-    title: string;
-    price?: number;
-  } | null>(null);
+
+  const addToCart = (id: string, type: "apartment" | "car") => {
+    const items = type === "apartment" ? apartments : cars;
+    const item = items.find((i) => i.id === id);
+    if (!item) return;
+
+    const existingItem = cart.find((i) => i.id === id);
+    if (existingItem) {
+      setCart(
+        cart.map((i) => (i.id === id ? { ...i, quantity: i.quantity + 1 } : i)),
+      );
+    } else {
+      setCart([
+        ...cart,
+        {
+          id,
+          type,
+          name: item.name,
+          price: item.price,
+          quantity: 1,
+          capacity: item.capacity,
+        },
+      ]);
+    }
+  };
+
+  const removeFromCart = (id: string) => {
+    setCart(cart.filter((item) => item.id !== id));
+  };
+
+  const updateQuantity = (id: string, delta: number) => {
+    setCart(
+      cart.map((item) => {
+        if (item.id === id) {
+          const newQuantity = Math.max(1, item.quantity + delta);
+          return { ...item, quantity: newQuantity };
+        }
+        return item;
+      }),
+    );
+  };
+
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
@@ -100,8 +145,6 @@ export default function ShortLetBookingForm() {
     } else if (!/^[0-9]{11}$/.test(formData.phone.replace(/\s/g, ""))) {
       newErrors.phone = "Phone number must be 11 digits";
     }
-    if (!formData.apartment && !selectedCar)
-      newErrors.apartment = "Please select a booking option";
     if (!formData.checkIn) newErrors.checkIn = "Check-in date is required";
     if (!formData.checkOut) newErrors.checkOut = "Check-out date is required";
     if (
@@ -111,10 +154,8 @@ export default function ShortLetBookingForm() {
     ) {
       newErrors.checkOut = "Check-out must be after check-in";
     }
-    if (formData.guests < 1)
-      newErrors.guests = selectedCar
-        ? "At least 1 passenger required"
-        : "At least 1 guest required";
+    if (cart.length === 0)
+      newErrors.cart = "Please add at least one item to cart";
     if (!formData.paymentMethod)
       newErrors.paymentMethod = "Please select a payment method";
 
@@ -126,102 +167,24 @@ export default function ShortLetBookingForm() {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    setIsSubmitting(false);
+    setIsSuccess(true);
 
-    try {
-      const isCarBooking = !!selectedCar;
-      const selectedApt = apartments.find(
-        (apt) => apt.id === formData.apartment,
-      );
-      const days = Math.max(
-        1,
-        Math.ceil(
-          (new Date(formData.checkOut).getTime() -
-            new Date(formData.checkIn).getTime()) /
-            (1000 * 60 * 60 * 24),
-        ),
-      );
-
-      // EmailJS configuration
-      const serviceId = "YOUR_SERVICE_ID"; // Replace with your EmailJS service ID
-      const templateId = "YOUR_TEMPLATE_ID"; // Replace with your EmailJS template ID
-      const publicKey = "YOUR_PUBLIC_KEY"; // Replace with your EmailJS public key
-
-      // Prepare email template parameters
-      const templateParams = {
-        to_email: "your-email@example.com", // Replace with your email
-        from_name: `${formData.firstName} ${formData.lastName}`,
-        from_email: formData.email,
-        phone: formData.phone,
-        apartment_name: isCarBooking ? undefined : selectedApt?.name,
-        vehicle_name: isCarBooking ? selectedCar?.title : undefined,
-        vehicle_price: isCarBooking ? selectedCar?.price : undefined,
-        check_in: new Date(formData.checkIn).toLocaleDateString(),
-        check_out: new Date(formData.checkOut).toLocaleDateString(),
-        nights: isCarBooking ? undefined : days,
-        rental_days: isCarBooking ? days : undefined,
-        guests: formData.guests,
-        total_price: formatPrice(
-          isCarBooking
-            ? (selectedCar?.price || 0) * days
-            : selectedApt
-              ? selectedApt.price * days
-              : 0,
-        ),
-        payment_method: paymentMethods.find(
-          (pm) => pm.id === formData.paymentMethod,
-        )?.name,
-        special_requests: formData.specialRequests || "None",
-        booking_date: new Date().toLocaleString(),
-        booking_type: isCarBooking ? "vehicle" : "apartment",
-      };
-
-      // Send email using EmailJS
-      const response = await fetch(
-        "https://api.emailjs.com/api/v1.0/email/send",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            service_id: serviceId,
-            template_id: templateId,
-            user_id: publicKey,
-            template_params: templateParams,
-          }),
-        },
-      );
-
-      if (response.ok) {
-        setIsSubmitting(false);
-        setIsSuccess(true);
-
-        // Reset form after 3 seconds
-        setTimeout(() => {
-          setIsSuccess(false);
-          setFormData({
-            firstName: "",
-            lastName: "",
-            email: "",
-            phone: "",
-            apartment: "",
-            checkIn: "",
-            checkOut: "",
-            guests: 1,
-            specialRequests: "",
-            paymentMethod: "",
-          });
-        }, 3000);
-      } else {
-        throw new Error("Failed to send email");
-      }
-    } catch (error) {
-      console.error("Error sending email:", error);
-      setIsSubmitting(false);
-      alert(
-        "Failed to submit booking. Please try again or contact us directly.",
-      );
-    }
+    setTimeout(() => {
+      setIsSuccess(false);
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        checkIn: "",
+        checkOut: "",
+        specialRequests: "",
+        paymentMethod: "",
+      });
+      setCart([]);
+    }, 3000);
   };
 
   const handleChange = (
@@ -236,29 +199,21 @@ export default function ShortLetBookingForm() {
     }
   };
 
-  const calculateTotalPrice = () => {
+  const calculateTotal = () => {
     if (!formData.checkIn || !formData.checkOut) return 0;
 
+    const checkIn = new Date(formData.checkIn);
+    const checkOut = new Date(formData.checkOut);
     const days = Math.max(
       1,
       Math.ceil(
-        (new Date(formData.checkOut).getTime() -
-          new Date(formData.checkIn).getTime()) /
-          (1000 * 60 * 60 * 24),
+        (checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24),
       ),
     );
 
-    if (selectedCar) {
-      const car = cars.find((c) => c.id === selectedCar.id);
-      if (!car) return 0;
-      return car.price * days;
-    }
-
-    if (!formData.apartment) return 0;
-    const apartment = apartments.find((apt) => apt.id === formData.apartment);
-    if (!apartment) return 0;
-
-    return apartment.price * days;
+    return cart.reduce((total, item) => {
+      return total + item.price * item.quantity * days;
+    }, 0);
   };
 
   const formatPrice = (price: number) => {
@@ -269,74 +224,19 @@ export default function ShortLetBookingForm() {
     }).format(price);
   };
 
-  const totalPrice = calculateTotalPrice();
+  const totalPrice = calculateTotal();
+  const nights =
+    formData.checkIn && formData.checkOut
+      ? Math.max(
+          1,
+          Math.ceil(
+            (new Date(formData.checkOut).getTime() -
+              new Date(formData.checkIn).getTime()) /
+              (1000 * 60 * 60 * 24),
+          ),
+        )
+      : 0;
 
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const apartmentId = searchParams?.get("apartmentId");
-    const carId = searchParams?.get("carId");
-
-    if (apartmentId) {
-      setFormData((prev) => ({ ...prev, apartment: apartmentId }));
-    }
-
-    if (carId) {
-      const foundCar = cars.find((c) => c.id === carId);
-      setSelectedCar(
-        foundCar
-          ? { id: foundCar.id, title: foundCar.title, price: foundCar.price }
-          : {
-              id: carId,
-              title: `Selected Vehicle #${carId}`,
-              price: undefined,
-            },
-      );
-    }
-
-    if (apartmentId || carId) {
-      setTimeout(() => {
-        document
-          .getElementById("booking")
-          ?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 80);
-    }
-  }, [searchParams, cars]);
-  // useEffect(() => {
-  //   const apartmentId = searchParams?.get("apartmentId");
-  //   const carId = searchParams?.get("carId");
-
-  //   if (apartmentId) {
-  //     setFormData((prev) => ({ ...prev, apartment: apartmentId }));
-  //     setTimeout(() => {
-  //       document.getElementById("booking")?.scrollIntoView({
-  //         behavior: "smooth",
-  //         block: "start",
-  //       });
-  //     }, 80);
-  //   }
-
-  //   if (carId) {
-  //     const foundCar = cars.find((c) => c.id === carId);
-
-  //     setSelectedCar(
-  //       foundCar
-  //         ? { id: foundCar.id, title: foundCar.title, price: foundCar.price }
-  //         : {
-  //             id: carId,
-  //             title: `Selected Vehicle #${carId}`,
-  //             price: undefined,
-  //           },
-  //     );
-
-  //     setTimeout(() => {
-  //       document.getElementById("booking")?.scrollIntoView({
-  //         behavior: "smooth",
-  //         block: "start",
-  //       });
-  //     }, 80);
-  //   }
-  // }, [searchParams, cars]);
   if (isSuccess) {
     return (
       <div
@@ -376,393 +276,386 @@ export default function ShortLetBookingForm() {
       id="booking"
       className="min-h-screen bg-linear-to-br from-background bg-[url('/bghotcoffestays.jpg')] bg-cover bg-center to-teal-50 py-12 px-4 sm:px-6 lg:px-8"
     >
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-600 mb-4">
-            {selectedCar ? "Book Your Vehicle" : "Book Your Stay"}
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            Checkout
           </h1>
           <p className="text-xl text-gray-600">
-            {selectedCar
-              ? "Fill in your details to reserve your vehicle"
-              : "Fill in your details to reserve your perfect apartment"}
+            Complete your booking for apartments and vehicles
           </p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <div className="bg-transparent backdrop-blur-sm rounded-3xl shadow-xl p-8 space-y-6">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                  <User className="mr-2 text-text-color" size={24} />
-                  Personal Information
-                </h2>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-600 mb-2">
-                      First Name *
-                    </label>
-                    <input
-                      type="text"
-                      name="firstName"
-                      value={formData.firstName}
-                      onChange={handleChange}
-                      className={`w-full px-4 py-3 rounded-xl border-2 ${errors.firstName ? "border-red-300" : "border-gray-200"} focus:border-gray-600 focus:outline-none transition`}
-                      placeholder="John"
-                    />
-                    {errors.firstName && (
-                      <p className="text-red-500 text-xs mt-1 flex items-center">
-                        <AlertCircle size={12} className="mr-1" />
-                        {errors.firstName}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-600 mb-2">
-                      Last Name *
-                    </label>
-                    <input
-                      type="text"
-                      name="lastName"
-                      value={formData.lastName}
-                      onChange={handleChange}
-                      className={`w-full px-4 py-3 rounded-xl border-2 ${errors.lastName ? "border-red-300" : "border-gray-200"} focus:border-gray-500 focus:outline-none transition`}
-                      placeholder="Doe"
-                    />
-                    {errors.lastName && (
-                      <p className="text-red-500 text-xs mt-1 flex items-center">
-                        <AlertCircle size={12} className="mr-1" />
-                        {errors.lastName}
-                      </p>
-                    )}
-                  </div>
-                </div>
+          <div className="lg:col-span-2 space-y-4">
+            <div className="bg-transparent backdrop-blur-sm rounded-3xl shadow-xl p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                <Plus className="mr-2 text-gray-600" size={24} />
+                Add Items to Cart
+              </h2>
 
-                <div className="grid md:grid-cols-2 gap-4 mt-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-600 mb-2">
-                      <Mail className="inline mr-1" size={16} />
-                      Email Address *
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className={`w-full px-4 py-3 rounded-xl border-2 ${errors.email ? "border-red-300" : "border-gray-200"} focus:border-gray-500 focus:outline-none transition`}
-                      placeholder="john.doe@example.com"
-                    />
-                    {errors.email && (
-                      <p className="text-red-500 text-xs mt-1 flex items-center">
-                        <AlertCircle size={12} className="mr-1" />
-                        {errors.email}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-600 mb-2">
-                      <Phone className="inline mr-1" size={16} />
-                      Phone Number *
-                    </label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className={`w-full px-4 py-3 rounded-xl border-2 ${errors.phone ? "border-red-300" : "border-gray-200"} focus:border-gray-500 focus:outline-none transition`}
-                      placeholder="08012345678"
-                    />
-                    {errors.phone && (
-                      <p className="text-red-500 text-xs mt-1 flex items-center">
-                        <AlertCircle size={12} className="mr-1" />
-                        {errors.phone}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-6 border-t border-gray-200">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                  <Home className="mr-2 text-gray-600" size={24} />
-                  Booking Details
-                </h2>
-
-                <div className="mb-4">
-                  <label className="block text-sm font-semibold text-gray-600 mb-2">
-                    <MapPin className="inline mr-1" size={16} />
-                    Select Apartment *
+              <div className="grid md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <Home className="inline mr-1" size={16} />
+                    Select Apartment
                   </label>
                   <select
-                    name="apartment"
-                    disabled={!!selectedCar}
-                    value={formData.apartment}
-                    onChange={handleChange}
-                    className={`w-full px-4 py-3 rounded-xl border-2 disabled:bg-gray-100 disabled:cursor-not-allowed ${errors.apartment ? "border-red-300" : "border-gray-200"} focus:border-gray-500 focus:outline-none transition`}
+                    onChange={(e) =>
+                      e.target.value && addToCart(e.target.value, "apartment")
+                    }
+                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-gray-500 focus:outline-none transition"
+                    defaultValue=""
                   >
-                    <option value="">Choose an apartment...</option>
+                    <option value="">Choose apartment...</option>
                     {apartments.map((apt) => (
                       <option key={apt.id} value={apt.id}>
-                        {apt.name} - {formatPrice(apt.price)}/night
+                        {apt.name} - {formatPrice(apt.price)}/night (
+                        {apt.capacity} guests)
                       </option>
                     ))}
                   </select>
-                  {errors.apartment && (
-                    <p className="text-red-500 text-xs mt-1 flex items-center">
-                      <AlertCircle size={12} className="mr-1" />
-                      {errors.apartment}
-                    </p>
-                  )}
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div className="md:col-span-1">
-                    <label className="block text-sm font-semibold text-gray-600 mb-2">
-                      <Calendar className="inline mr-1" size={16} />
-                      Check-In *
-                    </label>
-                    <input
-                      type="date"
-                      name="checkIn"
-                      value={formData.checkIn}
-                      onChange={handleChange}
-                      min={new Date().toISOString().split("T")[0]}
-                      className={`w-full px-4 py-3 rounded-xl border-2 ${errors.checkIn ? "border-red-300" : "border-gray-200"} focus:border-gray-600 focus:outline-none transition`}
-                    />
-                    {errors.checkIn && (
-                      <p className="text-red-500 text-xs mt-1 flex items-center">
-                        <AlertCircle size={12} className="mr-1" />
-                        {errors.checkIn}
-                      </p>
-                    )}
-                  </div>
-                  <div className="md:col-span-1">
-                    <label className="block text-sm font-semibold text-gray-600 mb-2">
-                      <Calendar className="inline mr-1" size={16} />
-                      Check-Out *
-                    </label>
-                    <input
-                      type="date"
-                      name="checkOut"
-                      value={formData.checkOut}
-                      onChange={handleChange}
-                      min={
-                        formData.checkIn ||
-                        new Date().toISOString().split("T")[0]
-                      }
-                      className={`w-full px-4 py-3 rounded-xl border-2 ${errors.checkOut ? "border-red-300" : "border-gray-200"} focus:border-gray-500 focus:outline-none transition`}
-                    />
-                    {errors.checkOut && (
-                      <p className="text-red-500 text-xs mt-1 flex items-center">
-                        <AlertCircle size={12} className="mr-1" />
-                        {errors.checkOut}
-                      </p>
-                    )}
-                  </div>
-                  <div className="md:col-span-1">
-                    <label className="block text-sm font-semibold text-gray-600 mb-2">
-                      <Users className="inline mr-1" size={16} />
-                      {selectedCar ? "Passengers *" : "Guests *"}
-                    </label>
-                    <input
-                      type="number"
-                      name="guests"
-                      value={formData.guests}
-                      onChange={handleChange}
-                      min="1"
-                      max="10"
-                      className={`w-full px-4 py-3 rounded-xl border-2 ${errors.guests ? "border-red-300" : "border-gray-200"} focus:border-gray-500 focus:outline-none transition`}
-                    />
-                    {errors.guests && (
-                      <p className="text-red-500 text-xs mt-1 flex items-center">
-                        <AlertCircle size={12} className="mr-1" />
-                        {errors.guests}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <label className="block text-sm font-semibold text-gray-600 mb-2">
-                    Special Requests (Optional)
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <Car className="inline mr-1" size={16} />
+                    Select Car
                   </label>
-                  <textarea
-                    name="specialRequests"
-                    value={formData.specialRequests}
-                    onChange={handleChange}
-                    rows={3}
-                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-gray-600 focus:outline-none transition resize-none"
-                    placeholder="Any special requests or requirements..."
-                  />
+                  <select
+                    onChange={(e) =>
+                      e.target.value && addToCart(e.target.value, "car")
+                    }
+                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-gray-500 focus:outline-none transition"
+                    defaultValue=""
+                  >
+                    <option value="">Choose vehicle...</option>
+                    {cars.map((car) => (
+                      <option key={car.id} value={car.id}>
+                        {car.name} - {formatPrice(car.price)}/day (
+                        {car.capacity} seats)
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
-              <div className="pt-6 border-t border-gray-200">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                  <CreditCard className="mr-2 text-gray-600" size={24} />
-                  Payment Method
-                </h2>
-                <div className="grid md:grid-cols-3 gap-4">
-                  {paymentMethods.map((method) => (
-                    <label
-                      key={method.id}
-                      className={`flex items-center justify-center p-4 rounded-xl border-2 cursor-pointer transition ${
-                        formData.paymentMethod === method.id
-                          ? "border-gray-500 bg-gray-50"
-                          : "border-gray-200 hover:border-gray-300"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value={method.id}
-                        checked={formData.paymentMethod === method.id}
-                        onChange={handleChange}
-                        className="sr-only"
-                      />
-                      <method.icon size={20} className="mr-2 text-gray-600" />
-                      <span className="font-semibold text-sm">
-                        {method.name}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-                {errors.paymentMethod && (
-                  <p className="text-red-500 text-xs mt-2 flex items-center">
-                    <AlertCircle size={12} className="mr-1" />
-                    {errors.paymentMethod}
-                  </p>
-                )}
-              </div>
-
-              <button
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-                className="w-full bg-gray-600 text-white py-4 rounded-xl hover:bg-gray-700 transition font-bold text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-              >
-                {isSubmitting ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    Processing...
-                  </>
-                ) : (
-                  "Complete Booking"
-                )}
-              </button>
-            </div>
-          </div>
-
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-3xl shadow-xl p-6 sticky top-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                {selectedCar && formData.apartment
-                  ? "Apartment & Vehicle Booking Summary"
-                  : selectedCar
-                    ? "Vehicle Booking Summary"
-                    : "Apartment Booking Summary"}
-              </h3>
-
-              {selectedCar && (
-                <div className="bg-gray-50 rounded-xl p-4 mb-4">
-                  <p className="text-sm text-gray-600 mb-1">Selected Vehicle</p>
-                  <p className="font-semibold text-gray-900">
-                    {selectedCar.title}
-                  </p>
-
-                  {formData.checkIn && formData.checkOut && (
-                    <>
-                      <div className="space-y-3 mb-4 pb-4 border-b border-gray-200 mt-3">
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Pick-up</span>
-                          <span className="font-semibold">
-                            {new Date(formData.checkIn).toLocaleDateString()}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Drop-off</span>
-                          <span className="font-semibold">
-                            {new Date(formData.checkOut).toLocaleDateString()}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Days</span>
-                          <span className="font-semibold">
-                            {Math.max(
-                              1,
-                              Math.ceil(
-                                (new Date(formData.checkOut).getTime() -
-                                  new Date(formData.checkIn).getTime()) /
-                                  (1000 * 60 * 60 * 24),
-                              ),
-                            )}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Passengers</span>
-                          <span className="font-semibold">
-                            {formData.guests}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="bg-gray-600 text-white rounded-xl p-4">
-                        <p className="text-gray-100 text-sm mb-1">
-                          Total Amount
-                        </p>
-                        <p className="text-3xl font-bold">
-                          {formatPrice(totalPrice)}
-                        </p>
-                      </div>
-                    </>
-                  )}
-                </div>
+              {errors.cart && (
+                <p className="text-red-500 text-sm mb-4 flex items-center">
+                  <AlertCircle size={14} className="mr-1" />
+                  {errors.cart}
+                </p>
               )}
 
-              {formData.apartment && (
+              {/* Cart Items */}
+              {cart.length > 0 && (
+                <div className="mt-6 space-y-3">
+                  <h3 className="font-semibold text-gray-900 mb-3">
+                    Cart Items ({cart.length})
+                  </h3>
+                  {cart.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center justify-between bg-gray-50 p-4 rounded-xl"
+                    >
+                      <div className="flex items-center gap-3 flex-1">
+                        {item.type === "apartment" ? (
+                          <Home size={20} className="text-gray-600" />
+                        ) : (
+                          <Car size={20} className="text-blue-600" />
+                        )}
+                        <div className="flex-1">
+                          <p className="font-semibold text-gray-900">
+                            {item.name}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            {formatPrice(item.price)}/
+                            {item.type === "apartment" ? "night" : "day"} •{" "}
+                            {item.capacity}{" "}
+                            {item.type === "apartment" ? "guests" : "seats"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => updateQuantity(item.id, -1)}
+                            className="w-8 h-8 bg-gray-200 rounded-lg hover:bg-gray-300 transition flex items-center justify-center"
+                          >
+                            <Minus size={16} />
+                          </button>
+                          <span className="w-8 text-center font-semibold">
+                            {item.quantity}
+                          </span>
+                          <button
+                            onClick={() => updateQuantity(item.id, 1)}
+                            className="w-8 h-8 bg-gray-200 rounded-lg hover:bg-gray-300 transition flex items-center justify-center"
+                          >
+                            <Plus size={16} />
+                          </button>
+                        </div>
+                        <button
+                          onClick={() => removeFromCart(item.id)}
+                          className="text-red-500 hover:text-red-700 transition"
+                        >
+                          <X size={20} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Personal Information */}
+            <div className="bg-transparent backdrop-blur-sm rounded-3xl shadow-xl p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                <User className="mr-2 text-gray-600" size={24} />
+                Personal Information
+              </h2>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    First Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 rounded-xl border-2 ${errors.firstName ? "border-red-300" : "border-gray-200"} focus:border-gray-500 focus:outline-none transition`}
+                    placeholder="John"
+                  />
+                  {errors.firstName && (
+                    <p className="text-red-500 text-xs mt-1 flex items-center">
+                      <AlertCircle size={12} className="mr-1" />
+                      {errors.firstName}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Last Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 rounded-xl border-2 ${errors.lastName ? "border-red-300" : "border-gray-200"} focus:border-gray-500 focus:outline-none transition`}
+                    placeholder="Doe"
+                  />
+                  {errors.lastName && (
+                    <p className="text-red-500 text-xs mt-1 flex items-center">
+                      <AlertCircle size={12} className="mr-1" />
+                      {errors.lastName}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <Mail className="inline mr-1" size={16} />
+                    Email *
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 rounded-xl border-2 ${errors.email ? "border-red-300" : "border-gray-200"} focus:border-gray-500 focus:outline-none transition`}
+                    placeholder="john@example.com"
+                  />
+                  {errors.email && (
+                    <p className="text-red-500 text-xs mt-1 flex items-center">
+                      <AlertCircle size={12} className="mr-1" />
+                      {errors.email}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <Phone className="inline mr-1" size={16} />
+                    Phone *
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 rounded-xl border-2 ${errors.phone ? "border-red-300" : "border-gray-200"} focus:border-gray-500 focus:outline-none transition`}
+                    placeholder="08012345678"
+                  />
+                  {errors.phone && (
+                    <p className="text-red-500 text-xs mt-1 flex items-center">
+                      <AlertCircle size={12} className="mr-1" />
+                      {errors.phone}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Booking Dates */}
+            <div className="bg-transparent backdrop-blur-sm rounded-3xl shadow-xl p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                <Calendar className="mr-2 text-gray-600" size={24} />
+                Booking Period
+              </h2>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Check-In *
+                  </label>
+                  <input
+                    type="date"
+                    name="checkIn"
+                    value={formData.checkIn}
+                    onChange={handleChange}
+                    min={new Date().toISOString().split("T")[0]}
+                    className={`w-full px-4 py-3 rounded-xl border-2 ${errors.checkIn ? "border-red-300" : "border-gray-200"} focus:border-gray-500 focus:outline-none transition`}
+                  />
+                  {errors.checkIn && (
+                    <p className="text-red-500 text-xs mt-1 flex items-center">
+                      <AlertCircle size={12} className="mr-1" />
+                      {errors.checkIn}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Check-Out *
+                  </label>
+                  <input
+                    type="date"
+                    name="checkOut"
+                    value={formData.checkOut}
+                    onChange={handleChange}
+                    min={
+                      formData.checkIn || new Date().toISOString().split("T")[0]
+                    }
+                    className={`w-full px-4 py-3 rounded-xl border-2 ${errors.checkOut ? "border-red-300" : "border-gray-200"} focus:border-gray-500 focus:outline-none transition`}
+                  />
+                  {errors.checkOut && (
+                    <p className="text-red-500 text-xs mt-1 flex items-center">
+                      <AlertCircle size={12} className="mr-1" />
+                      {errors.checkOut}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="mt-4">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Special Requests
+                </label>
+                <textarea
+                  name="specialRequests"
+                  value={formData.specialRequests}
+                  onChange={handleChange}
+                  rows={3}
+                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-gray-500 focus:outline-none transition resize-none"
+                  placeholder="Any special requirements..."
+                />
+              </div>
+            </div>
+
+            {/* Payment */}
+            <div className="bg-transparent backdrop-blur-sm rounded-3xl shadow-xl p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                <CreditCard className="mr-2 text-text-color" size={24} />
+                Payment Method
+              </h2>
+              <div className="grid md:grid-cols-3 gap-4">
+                {paymentMethods.map((method) => (
+                  <label
+                    key={method.id}
+                    className={`flex items-center justify-center p-4 rounded-xl border-2 cursor-pointer transition ${formData.paymentMethod === method.id ? "border-gray-500 bg-gray-50" : "border-gray-200 hover:border-gray-300"}`}
+                  >
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value={method.id}
+                      checked={formData.paymentMethod === method.id}
+                      onChange={handleChange}
+                      className="sr-only"
+                    />
+                    <method.icon size={20} className="mr-2 text-gray-600" />
+                    <span className="font-semibold text-sm">{method.name}</span>
+                  </label>
+                ))}
+              </div>
+              {errors.paymentMethod && (
+                <p className="text-red-500 text-xs mt-2 flex items-center">
+                  <AlertCircle size={12} className="mr-1" />
+                  {errors.paymentMethod}
+                </p>
+              )}
+            </div>
+
+            <button
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+              className="w-full bg-background text-foreground py-4 rounded-xl hover:bg-gray-700 transition font-bold text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+            >
+              {isSubmitting ? (
                 <>
-                  <div className="bg-gray-50 rounded-xl p-4 mb-4">
-                    <p className="text-sm text-gray-600 mb-1">
-                      Selected Apartment
-                    </p>
-                    <p className="font-semibold text-gray-900">
-                      {
-                        apartments.find((apt) => apt.id === formData.apartment)
-                          ?.name
-                      }
-                    </p>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  Processing...
+                </>
+              ) : (
+                "Complete Booking"
+              )}
+            </button>
+          </div>
+
+          {/* Summary Sidebar */}
+          <div className="lg:col-span-1">
+            <div className="bg-transparent backdrop-blur-sm rounded-3xl shadow-xl p-8 sticky top-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
+                Booking Summary
+              </h3>
+
+              {cart.length > 0 ? (
+                <>
+                  <div className="space-y-3 mb-4 pb-4 border-b border-gray-200">
+                    {cart.map((item) => (
+                      <div
+                        key={item.id}
+                        className="flex justify-between items-start"
+                      >
+                        <div className="flex-1">
+                          <p className="font-semibold text-sm text-gray-900">
+                            {item.name}
+                          </p>
+                          <p className="text-xs text-gray-600">
+                            Qty: {item.quantity} × {formatPrice(item.price)}
+                          </p>
+                        </div>
+                        <p className="font-semibold text-sm">
+                          {formatPrice(item.price * item.quantity)}
+                        </p>
+                      </div>
+                    ))}
                   </div>
 
                   {formData.checkIn && formData.checkOut && (
                     <>
-                      <div className="space-y-3 mb-4 pb-4 border-b border-gray-200">
-                        <div className="flex justify-between">
+                      <div className="space-y-2 mb-4 pb-4 border-b border-gray-200">
+                        <div className="flex justify-between text-sm">
                           <span className="text-gray-600">Check-in</span>
                           <span className="font-semibold">
                             {new Date(formData.checkIn).toLocaleDateString()}
                           </span>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between text-sm">
                           <span className="text-gray-600">Check-out</span>
                           <span className="font-semibold">
                             {new Date(formData.checkOut).toLocaleDateString()}
                           </span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Nights</span>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-600">Duration</span>
                           <span className="font-semibold">
-                            {Math.max(
-                              0,
-                              Math.ceil(
-                                (new Date(formData.checkOut).getTime() -
-                                  new Date(formData.checkIn).getTime()) /
-                                  (1000 * 60 * 60 * 24),
-                              ),
-                            )}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Guests</span>
-                          <span className="font-semibold">
-                            {formData.guests}
+                            {nights} night(s)
                           </span>
                         </div>
                       </div>
@@ -774,16 +667,18 @@ export default function ShortLetBookingForm() {
                         <p className="text-3xl font-bold">
                           {formatPrice(totalPrice)}
                         </p>
+                        <p className="text-gray-100 text-xs mt-1">
+                          {cart.length} item(s) for {nights} night(s)
+                        </p>
                       </div>
                     </>
                   )}
                 </>
-              )}
-
-              {!formData.apartment && (
+              ) : (
                 <div className="text-center py-8 text-gray-400">
                   <Home size={48} className="mx-auto mb-2 opacity-50" />
-                  <p>Select an apartment or vehicle to see pricing</p>
+                  <p>No items in cart</p>
+                  <p className="text-sm mt-2">Add apartments or cars above</p>
                 </div>
               )}
             </div>
