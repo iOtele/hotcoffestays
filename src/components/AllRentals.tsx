@@ -23,6 +23,7 @@ import {
 import Image from "next/image";
 
 interface Apartment {
+  type: "apartment";
   id: number;
   title: string;
   location: string;
@@ -36,9 +37,10 @@ interface Apartment {
 }
 
 interface CarRental {
+  type: string;
   id: number;
   title: string;
-  type: string;
+
   price: number;
   rating: number;
   reviews: number;
@@ -52,6 +54,7 @@ interface CarRental {
 
 const apartments: Apartment[] = [
   {
+    type: "apartment",
     id: 1,
     title: "Luxury Lekki Penthouse",
     location: "Lekki Phase 1, Lagos",
@@ -64,6 +67,7 @@ const apartments: Apartment[] = [
     guests: 4,
   },
   {
+    type: "apartment",
     id: 2,
     title: "Cozy Victoria Island Studio",
     location: "Victoria Island, Lagos",
@@ -76,6 +80,7 @@ const apartments: Apartment[] = [
     guests: 2,
   },
   {
+    type: "apartment",
     id: 3,
     title: "Spacious Ikeja Apartment",
     location: "Ikeja GRA, Lagos",
@@ -88,6 +93,7 @@ const apartments: Apartment[] = [
     guests: 3,
   },
   {
+    type: "apartment",
     id: 4,
     title: "Modern Ikoyi Heights",
     location: "Ikoyi, Lagos",
@@ -100,6 +106,7 @@ const apartments: Apartment[] = [
     guests: 5,
   },
   {
+    type: "apartment",
     id: 5,
     title: "Charming Yaba Flat",
     location: "Yaba, Lagos",
@@ -112,6 +119,7 @@ const apartments: Apartment[] = [
     guests: 2,
   },
   {
+    type: "apartment",
     id: 6,
     title: "Elegant Banana Island Villa",
     location: "Banana Island, Lagos",
@@ -124,6 +132,7 @@ const apartments: Apartment[] = [
     guests: 6,
   },
   {
+    type: "apartment",
     id: 7,
     title: "Contemporary Surulere Space",
     location: "Surulere, Lagos",
@@ -136,6 +145,7 @@ const apartments: Apartment[] = [
     guests: 3,
   },
   {
+    type: "apartment",
     id: 8,
     title: "Serene Ajah Getaway",
     location: "Ajah, Lagos",
@@ -148,6 +158,7 @@ const apartments: Apartment[] = [
     guests: 4,
   },
   {
+    type: "apartment",
     id: 9,
     title: "Modern Ikoyi Loft",
     location: "Ikoyi, Lagos",
@@ -272,7 +283,7 @@ const cars: CarRental[] = [
     title: "BMW X3",
     type: "Luxury SUV",
     price: 100000,
-    rating: 6.0,
+    rating: 5.0,
     reviews: 164,
     image: "/car2.jpeg",
     features: ["Premium Interior", "AC", "GPS", "Sporty Design"],
@@ -740,9 +751,8 @@ const AllRentals = () => {
           {activeTab === "apartments" ? "apartments" : "vehicles"}
         </div>
 
-        {/* Content Display */}
         {currentItems.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 shadow-lg shadow-gray-600 p-8 rounded-2xl bg-white/80 backdrop-blur-sm">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 shadow-lg shadow-gray-600 p-8 rounded-2xl bg-transparent backdrop-blur-sm">
             {activeTab === "apartments"
               ? filteredApartments.map((apartment) => (
                   <div

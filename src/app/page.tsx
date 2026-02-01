@@ -1,5 +1,5 @@
 "use client";
-
+import { Suspense } from "react";
 import CallToAction from "@/components/CallToAction";
 import ContactUs from "@/components/ContactUs";
 import Footer from "@/components/Footer";
@@ -21,7 +21,9 @@ const HotCaffestayLanding = () => {
       <Why />
       <TestimonialSwiper />
       <AboutUs />
-      <Booking />
+      <Suspense fallback={null}>
+        <Booking />
+      </Suspense>
       <ContactUs />
       <Team />
       <CallToAction />
