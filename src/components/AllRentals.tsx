@@ -176,7 +176,7 @@ const cars: CarRental[] = [
   {
     id: 1,
     title: "Toyota Camry 2023",
-    type: "Sedan",
+    type: "car",
     price: 35000,
     rating: 4.8,
     reviews: 156,
@@ -189,7 +189,7 @@ const cars: CarRental[] = [
   {
     id: 2,
     title: "Mercedes-Benz GLE",
-    type: "SUV",
+    type: "car",
     price: 85000,
     rating: 5.0,
     reviews: 203,
@@ -202,11 +202,11 @@ const cars: CarRental[] = [
   {
     id: 3,
     title: "Honda Accord 2022",
-    type: "Sedan",
+    type: "car",
     price: 30000,
     rating: 4.7,
     reviews: 142,
-    image: "/car3.jpeg",
+    image: "/car2.jpeg",
     features: ["Bluetooth", "AC", "Backup Camera", "USB Ports"],
     seats: 5,
     transmission: "Automatic",
@@ -215,12 +215,12 @@ const cars: CarRental[] = [
   {
     id: 4,
     title: "Range Rover Sport",
-    type: "SUV",
+    type: "car",
     price: 120000,
     rating: 5.0,
     reviews: 187,
     image: "/car1.jpeg",
-    video: "/car4.mp4",
+    video: "/car3.mp4",
     features: ["Premium Interior", "AC", "GPS", "Panoramic Roof"],
     seats: 5,
     transmission: "Automatic",
@@ -229,7 +229,7 @@ const cars: CarRental[] = [
   {
     id: 5,
     title: "Toyota Highlander",
-    type: "SUV",
+    type: "car",
     price: 65000,
     rating: 4.9,
     reviews: 178,
@@ -242,11 +242,12 @@ const cars: CarRental[] = [
   {
     id: 6,
     title: "Lexus ES 350",
-    type: "Luxury Sedan",
+    type: "car",
     price: 75000,
     rating: 5.0,
     reviews: 145,
-    image: "/car3.jpeg",
+    image: "/car2.jpeg",
+    video: "/car3.mp4",
     features: ["Premium Sound", "AC", "GPS", "Heated Seats"],
     seats: 5,
     transmission: "Automatic",
@@ -255,7 +256,7 @@ const cars: CarRental[] = [
   {
     id: 7,
     title: "Nissan Altima 2023",
-    type: "Sedan",
+    type: "car",
     price: 28000,
     rating: 4.6,
     reviews: 98,
@@ -268,7 +269,7 @@ const cars: CarRental[] = [
   {
     id: 8,
     title: "BMW X5",
-    type: "Luxury SUV",
+    type: "car",
     price: 95000,
     rating: 5.0,
     reviews: 164,
@@ -281,7 +282,7 @@ const cars: CarRental[] = [
   {
     id: 9,
     title: "BMW X3",
-    type: "Luxury SUV",
+    type: "car",
     price: 100000,
     rating: 5.0,
     reviews: 164,
@@ -334,9 +335,6 @@ const AllRentals = () => {
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("featured");
   const [showFilters, setShowFilters] = useState(false);
-  const [selectedBooking, setSelectedBooking] = useState<
-    Apartment | CarRental | null
-  >(null);
 
   const locations = [
     "all",
@@ -478,6 +476,12 @@ const AllRentals = () => {
     activeTab === "apartments" ? filteredApartments : filteredCars;
   const totalItems =
     activeTab === "apartments" ? apartments.length : cars.length;
+
+  const handleBooking = (id: number, type: "apartment" | "car") => {
+    const query = type === "apartment" ? `apartmentId=${id}` : `carId=${id}`;
+
+    window.location.href = `/booking?${query}`;
+  };
 
   return (
     <div
@@ -838,7 +842,7 @@ const AllRentals = () => {
                         </span>
                       </div>
                       <button
-                        onClick={() => setSelectedBooking(apartment)}
+                        onClick={() => handleBooking(apartment.id, "apartment")}
                         className="w-full mt-2 py-2 bg-gray-800 text-white rounded-lg font-semibold hover:bg-gray-900 transition"
                       >
                         Book Now
@@ -931,7 +935,7 @@ const AllRentals = () => {
                         </span>
                       </div>
                       <button
-                        onClick={() => setSelectedBooking(car)}
+                        onClick={() => handleBooking(car.id, "car")}
                         className="w-full mt-2 py-2 bg-gray-800 text-white rounded-lg font-semibold hover:bg-gray-900 transition"
                       >
                         Book Now

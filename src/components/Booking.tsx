@@ -101,7 +101,7 @@ export default function ShortLetBookingForm() {
       newErrors.phone = "Phone number must be 11 digits";
     }
     if (!formData.apartment && !selectedCar)
-      newErrors.apartment = "Please select an apartment or a vehicle";
+      newErrors.apartment = "Please select a booking option";
     if (!formData.checkIn) newErrors.checkIn = "Check-in date is required";
     if (!formData.checkOut) newErrors.checkOut = "Check-out date is required";
     if (
@@ -111,7 +111,10 @@ export default function ShortLetBookingForm() {
     ) {
       newErrors.checkOut = "Check-out must be after check-in";
     }
-    if (formData.guests < 1) newErrors.guests = "At least 1 guest required";
+    if (formData.guests < 1)
+      newErrors.guests = selectedCar
+        ? "At least 1 passenger required"
+        : "At least 1 guest required";
     if (!formData.paymentMethod)
       newErrors.paymentMethod = "Please select a payment method";
 
@@ -125,7 +128,6 @@ export default function ShortLetBookingForm() {
     setIsSubmitting(true);
 
     try {
-      // Determine booking type and details (apartment or vehicle)
       const isCarBooking = !!selectedCar;
       const selectedApt = apartments.find(
         (apt) => apt.id === formData.apartment,
@@ -492,9 +494,10 @@ export default function ShortLetBookingForm() {
                   </label>
                   <select
                     name="apartment"
+                    disabled={!!selectedCar}
                     value={formData.apartment}
                     onChange={handleChange}
-                    className={`w-full px-4 py-3 rounded-xl border-2 ${errors.apartment ? "border-red-300" : "border-gray-200"} focus:border-gray-500 focus:outline-none transition`}
+                    className={`w-full px-4 py-3 rounded-xl border-2 disabled:bg-gray-100 disabled:cursor-not-allowed ${errors.apartment ? "border-red-300" : "border-gray-200"} focus:border-gray-500 focus:outline-none transition`}
                   >
                     <option value="">Choose an apartment...</option>
                     {apartments.map((apt) => (
