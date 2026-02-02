@@ -5,11 +5,13 @@ export default function AboutUs() {
   return (
     <div className="min-h-screen">
       <section className="py-24 px-6">
-        <div className="max-w-7xl mx-auto">
+        <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">Our Story</h2>
-              <div className="space-y-4 text-lg opacity-90 leading-relaxed">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
+                Our Story
+              </h2>
+              <div className="space-y-4 text-lg opacity-60 leading-relaxed text-foreground">
                 <p>
                   Founded in 2010, HotCoffeStays began with a simple vision: to
                   revolutionize the way people experience travel and
