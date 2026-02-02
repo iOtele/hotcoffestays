@@ -18,8 +18,8 @@ export const metadata: Metadata = {
     "Discover Your Perfect Stay with HOTCOFFESTAYS - Where Comfort Meets Convenience",
   icons: {
     icon: "/rent.png",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
+    // shortcut: "/favicon-16x16.png",
+    // apple: "/apple-touch-icon.png",
   },
 };
 

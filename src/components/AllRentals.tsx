@@ -957,3 +957,4 @@ const AllRentals = () => {
   );
 };
 export default AllRentals;
+
