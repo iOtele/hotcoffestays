@@ -833,42 +833,42 @@ export default function CheckoutBookingForm() {
   ];
 
   // FIXED: Add useEffect to handle URL parameters and pre-populate cart
-  useEffect(() => {
-    const type = searchParams.get("type") as "apartment" | "car" | null;
-    const id = searchParams.get("id");
-    const name = searchParams.get("name");
-    const price = searchParams.get("price");
-    const capacity = searchParams.get("capacity");
+  // useEffect(() => {
+  //   const type = searchParams.get("type") as "apartment" | "car" | null;
+  //   const id = searchParams.get("id");
+  //   const name = searchParams.get("name");
+  //   const price = searchParams.get("price");
+  //   const capacity = searchParams.get("capacity");
 
-    if (type && id && name && price && capacity) {
-      const parsedPrice = parseInt(price, 10);
-      const parsedCapacity = parseInt(capacity, 10);
+  //   if (type && id && name && price && capacity) {
+  //     const parsedPrice = parseInt(price, 10);
+  //     const parsedCapacity = parseInt(capacity, 10);
 
-      // Validate parsed values
-      if (!isNaN(parsedPrice) && !isNaN(parsedCapacity)) {
-        setCart((prevCart) => {
-          // Check if item already exists in cart
-          const exists = prevCart.find(
-            (item) => item.id === id && item.type === type,
-          );
-          if (exists) {
-            return prevCart;
-          }
+  //     // Validate parsed values
+  //     if (!isNaN(parsedPrice) && !isNaN(parsedCapacity)) {
+  //       setCart((prevCart) => {
+  //         // Check if item already exists in cart
+  //         const exists = prevCart.find(
+  //           (item) => item.id === id && item.type === type,
+  //         );
+  //         if (exists) {
+  //           return prevCart;
+  //         }
 
-          const newItem: CartItem = {
-            id,
-            type,
-            name,
-            price: parsedPrice,
-            quantity: 1,
-            capacity: parsedCapacity,
-          };
+  //         const newItem: CartItem = {
+  //           id,
+  //           type,
+  //           name,
+  //           price: parsedPrice,
+  //           quantity: 1,
+  //           capacity: parsedCapacity,
+  //         };
 
-          return [...prevCart, newItem];
-        });
-      }
-    }
-  }, [searchParams]);
+  //         return [...prevCart, newItem];
+  //       });
+  //     }
+  //   }
+  // }, [searchParams]);
 
   const addToCart = (id: string, type: "apartment" | "car") => {
     const items = type === "apartment" ? apartments : cars;
