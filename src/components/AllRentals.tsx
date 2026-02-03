@@ -841,12 +841,15 @@ const AllRentals = () => {
                           / night
                         </span>
                       </div>
-                      <button
-                        onClick={() => handleBooking(apartment.id, "apartment")}
-                        className="w-full mt-2 py-2 bg-gray-800 text-white rounded-lg font-semibold hover:bg-gray-900 transition"
-                      >
-                        Book Now
-                      </button>
+                      <a href="#booking">
+                        <button
+                          // onClick={() => handleBooking(car.id, "car")}
+
+                          className="w-full mt-2 py-2 bg-gray-800 text-white rounded-lg font-semibold hover:bg-gray-900 transition"
+                        >
+                          Book Now
+                        </button>
+                      </a>
                     </div>
                   </div>
                 ))
@@ -934,12 +937,15 @@ const AllRentals = () => {
                           / day
                         </span>
                       </div>
-                      <button
-                        onClick={() => handleBooking(car.id, "car")}
-                        className="w-full mt-2 py-2 bg-gray-800 text-white rounded-lg font-semibold hover:bg-gray-900 transition"
-                      >
-                        Book Now
-                      </button>
+                      <a href="#booking">
+                        <button
+                          // onClick={() => handleBooking(car.id, "car")}
+
+                          className="w-full mt-2 py-2 bg-gray-800 text-white rounded-lg font-semibold hover:bg-gray-900 transition"
+                        >
+                          Book Now
+                        </button>
+                      </a>
                     </div>
                   </div>
                 ))}
@@ -957,4 +963,3 @@ const AllRentals = () => {
   );
 };
 export default AllRentals;
-
